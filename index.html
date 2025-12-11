@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infográfico: Análise de Mercado Jiu-Jitsu Goiânia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Chosen Palette: Energetic Blue & Orange (Vibrant, Professional, Action-Oriented) -->
+    <!-- Application Structure Plan:
+         1. Hero Section: Hooking the user with the core question: Where to open a gym?
+         2. Executive Summary (KPIs): Quick stats (Total Sectors, Avg Rent, Opportunity Score).
+         3. The "Sweet Spot" Analysis (Bubble Chart): The core visualization correlating Density, Competition, and Synergy.
+         4. Financial Landscape (Bar Chart): Comparing rental costs to understand barrier to entry.
+         5. Top Contender Comparison (Radar Chart): A multi-axial comparison of the top 3 recommendations.
+         6. Audience Projection (Donut Chart): Breakdown of potential student types in the winner sector.
+         7. Growth Forecast (Line Chart): Simulated ROI timeline for the recommended location.
+         8. Final Verdict: Conclusion cards with the top recommendations.
+         This narrative moves from the "Why" to the "Data" to the "Decision".
+    -->
+    <!-- Visualization & Content Choices:
+         - Data Point: Market Saturation vs Density -> Goal: Relationships -> Viz: Bubble Chart (Chart.js) -> Shows "Blue Ocean" opportunities clearly.
+         - Data Point: Rent Cost Comparison -> Goal: Compare -> Viz: Bar Chart (Chart.js) -> Clear ranking of costs.
+         - Data Point: Top 3 Sector Profiles -> Goal: Compare/Organize -> Viz: Radar Chart (Chart.js) -> Shows strengths/weaknesses (balance) of each option.
+         - Data Point: Student Demographics -> Goal: Composition -> Viz: Donut Chart (Chart.js) -> Helps define business model (Kids vs Adult).
+         - Data Point: 24-Month Projection -> Goal: Change -> Viz: Line Chart (Chart.js) -> Visualizes the business potential over time.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#1d4ed8', // Blue 700
+                            light: '#eff6ff', // Blue 50
+                            dark: '#1e3a8a', // Blue 900
+                            orange: '#f97316', // Orange 500
+                            orangeLight: '#ffedd5', // Orange 100
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        /* Chart Container Styling - MANDATORY */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px; /* Slightly wider for infographic feel */
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; /* Base height */
+            max-height: 450px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        .section-card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #1d4ed8 0%, #f97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- Hero Section -->
+    <header class="bg-white pb-12 pt-16 border-b border-slate-200">
+        <div class="max-w-5xl mx-auto px-6 text-center">
+            <div class="inline-block px-4 py-1 mb-4 rounded-full bg-brand-orangeLight text-brand-orange font-bold text-sm uppercase tracking-wide">
+                Estudo de Viabilidade 2024
+            </div>
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 text-slate-900">
+                Onde Montar seu Tatame <br />
+                <span class="gradient-text">Em Goiânia e Região?</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+                Uma análise baseada em dados cruzando <strong>densidade demográfica</strong>, <strong>saturação da concorrência</strong> e <strong>custo de ocupação</strong> para identificar os oceanos azuis do Jiu-Jitsu na capital goiana.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12">
+
+        <!-- Section 1: Introduction & KPIs -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6 border-l-8 border-brand-orange pl-4">
+                Visão Geral do Mercado
+            </h2>
+            <p class="text-slate-600 text-lg mb-8 leading-relaxed">
+                Antes de mergulharmos nos gráficos detalhados, é crucial entender o cenário macro. Analisamos 10 dos principais setores residenciais da Grande Goiânia. O objetivo é fugir da "guerra de preços" dos setores saturados e encontrar locais com alta demanda reprimida.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- KPI 1 -->
+                <div class="bg-brand-blue text-white rounded-xl p-6 shadow-lg transform hover:-translate-y-1 transition duration-300">
+                    <div class="text-5xl font-extrabold mb-2">10</div>
+                    <div class="text-blue-100 font-medium text-lg">Setores Analisados</div>
+                    <div class="mt-4 text-sm text-blue-200 opacity-90">De Alphaville a Aparecida de Goiânia.</div>
+                </div>
+                <!-- KPI 2 -->
+                <div class="bg-white border-l-4 border-brand-orange rounded-xl p-6 shadow-md">
+                    <div class="text-5xl font-extrabold text-slate-800 mb-2">6.2</div>
+                    <div class="text-slate-500 font-medium text-lg">Média de Concorrentes</div>
+                    <div class="mt-4 text-sm text-slate-400">Por raio de 1.5km nos setores nobres.</div>
+                </div>
+                <!-- KPI 3 -->
+                <div class="bg-white border-l-4 border-brand-blue rounded-xl p-6 shadow-md">
+                    <div class="text-5xl font-extrabold text-slate-800 mb-2">85%</div>
+                    <div class="text-slate-500 font-medium text-lg">Taxa de Ocupação</div>
+                    <div class="mt-4 text-sm text-slate-400">Em academias de bairros verticais densos.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: The Bubble Chart (Strategic Analysis) -->
+        <section class="section-card">
+            <h2 class="text-2xl font-bold text-slate-800 mb-4">
+                A Busca pelo "Oceano Azul"
+            </h2>
+            <p class="text-slate-600 mb-8">
+                Este gráfico é o coração da nossa análise. Ele correlaciona <strong>Concorrência</strong> (Eixo X) com <strong>Densidade Populacional</strong> (Eixo Y).
+                <br/><br/>
+                <span class="inline-block w-3 h-3 bg-brand-blue rounded-full mr-1"></span> <strong>Objetivo:</strong> Procuramos o canto <strong>superior esquerdo</strong>: Bairros com muita gente (alto Y) e poucas academias (baixo X).
+                <br/>
+                <span class="inline-block w-3 h-3 bg-brand-orange rounded-full mr-1"></span> <strong>Tamanho da Bolha:</strong> Representa a <strong>Sinergia</strong> (Proximidade com academias de musculação). Quanto maior, melhor.
+            </p>
+
+            <div class="chart-container">
+                <canvas id="bubbleChart"></canvas>
+            </div>
+            
+            <div class="mt-6 bg-blue-50 p-4 rounded-lg border border-blue-100">
+                <h4 class="font-bold text-brand-blue mb-1">Insight Principal:</h4>
+                <p class="text-sm text-slate-700">
+                    O <strong>Parque Amazônia</strong> e o <strong>Residencial Eldorado</strong> destacam-se isolados no quadrante de oportunidade. O Setor Bueno, apesar da alta densidade, sofre com saturação extrema.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 3: Cost Analysis (Bar Chart) -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            <div class="bg-white rounded-xl shadow-md p-8">
+                <h2 class="text-2xl font-bold text-slate-800 mb-4">
+                    Barreira de Entrada: Custo de Aluguel
+                </h2>
+                <p class="text-slate-600 mb-6 text-sm leading-relaxed">
+                    O valor do aluguel comercial é o "assassino silencioso" de Dojos iniciantes. Enquanto o Setor Marista oferece prestígio, o custo fixo exige uma mensalidade premium imediata. Veja como os custos médios se comparam (escala de 1 a 10).
+                </p>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md p-8 flex flex-col justify-center">
+                <h3 class="text-xl font-bold text-slate-800 mb-6">Interpretação Financeira</h3>
+                <ul class="space-y-6">
+                    <li class="flex items-start">
+                        <span class="text-2xl mr-4">🏢</span>
+                        <div>
+                            <strong class="text-brand-dark block">Alto Risco / Alta Recompensa</strong>
+                            <span class="text-slate-500 text-sm">Marista e Bueno exigem capital de giro robusto para suportar os primeiros 12 meses.</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-2xl mr-4">⚖️</span>
+                        <div>
+                            <strong class="text-brand-blue block">O Equilíbrio Ideal</strong>
+                            <span class="text-slate-500 text-sm">Parque Amazônia e Eldorado oferecem aluguéis médios com densidade de "Setor Nobre".</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-2xl mr-4">🚀</span>
+                        <div>
+                            <strong class="text-brand-orange block">Aposta de Volume</strong>
+                            <span class="text-slate-500 text-sm">Aparecida e Negrão de Lima permitem mensalidades acessíveis devido ao baixo custo fixo.</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 4: Radar Comparison (The Top 3) -->
+        <section class="section-card">
+            <div class="md:flex md:justify-between md:items-center mb-6">
+                <div class="md:w-2/3">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">
+                        Batalha dos Finalistas
+                    </h2>
+                    <p class="text-slate-600">
+                        Comparamos os 3 setores mais promissores em 5 eixos vitais para a sustentabilidade do negócio.
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <span class="inline-block px-3 py-1 bg-slate-100 text-slate-600 text-xs font-semibold rounded-full border border-slate-300">Escala: 0 (Pior) a 10 (Melhor)</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                <div class="md:col-span-2">
+                    <div class="chart-container" style="height: 450px; max-width: 600px;">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="p-4 rounded-lg bg-green-50 border-l-4 border-green-500">
+                        <strong class="text-green-800 block text-lg">Parque Amazônia</strong>
+                        <span class="text-green-700 text-sm">O vencedor geral. Melhor equilíbrio entre densidade e falta de concorrentes diretos.</span>
+                    </div>
+                    <div class="p-4 rounded-lg bg-blue-50 border-l-4 border-blue-500">
+                        <strong class="text-blue-800 block text-lg">Jardim Goiás</strong>
+                        <span class="text-blue-700 text-sm">Melhor para tickets altos (Premium). Excelente infraestrutura, mas concorrência média.</span>
+                    </div>
+                    <div class="p-4 rounded-lg bg-orange-50 border-l-4 border-orange-500">
+                        <strong class="text-orange-800 block text-lg">Res. Eldorado</strong>
+                        <span class="text-orange-700 text-sm">Maior potencial de volume. Muita gente jovem, ideal para horários de pico lotados.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Demographics & Projections -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            <!-- Donut Chart -->
+            <div class="bg-white rounded-xl shadow-md p-8">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">Perfil do Público (Vencedor)</h3>
+                <p class="text-sm text-slate-500 mb-6">
+                    Baseado no perfil demográfico do <strong>Parque Amazônia</strong>, esta é a composição esperada da base de alunos.
+                </p>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="donutChart"></canvas>
+                </div>
+                <p class="text-center text-xs text-slate-400 mt-4">Foco recomendado: Jiu-Jitsu Kids e Executivo Noite.</p>
+            </div>
+
+            <!-- Line Chart -->
+            <div class="bg-white rounded-xl shadow-md p-8">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">Projeção de Alunos (24 Meses)</h3>
+                <p class="text-sm text-slate-500 mb-6">
+                    Simulação conservadora de crescimento para uma academia de 150m² no setor vencedor.
+                </p>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="lineChart"></canvas>
+                </div>
+                <p class="text-center text-xs text-slate-400 mt-4">Break-even estimado no mês 8.</p>
+            </div>
+        </section>
+
+        <!-- Section 6: Conclusion -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-800 mb-8 text-center">
+                Veredito Final
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <!-- Recommendation 1 -->
+                <div class="relative bg-white rounded-2xl shadow-xl overflow-hidden border-t-8 border-brand-orange transform hover:-translate-y-2 transition duration-300">
+                    <div class="p-8">
+                        <div class="text-xs font-bold tracking-widest text-slate-400 uppercase mb-2">A Escolha Racional</div>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-4">Parque Amazônia</h3>
+                        <p class="text-slate-600 text-sm mb-6">
+                            Combinação perfeita de verticalização acelerada e escassez de serviços esportivos especializados. O aluguel ainda é acessível comparado aos vizinhos nobres.
+                        </p>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-center text-sm text-slate-700"><span class="mr-2 text-brand-orange">✓</span> Alta Densidade</li>
+                            <li class="flex items-center text-sm text-slate-700"><span class="mr-2 text-brand-orange">✓</span> Concorrência Baixa</li>
+                            <li class="flex items-center text-sm text-slate-700"><span class="mr-2 text-brand-orange">✓</span> Ticket Médio</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 px-8 py-4 border-t border-slate-100">
+                        <span class="text-brand-dark font-bold text-sm">Ideal para:</span> <span class="text-slate-600 text-sm">Primeiro negócio</span>
+                    </div>
+                </div>
+
+                <!-- Recommendation 2 -->
+                <div class="relative bg-white rounded-2xl shadow-lg overflow-hidden border-t-8 border-brand-blue opacity-90 hover:opacity-100 transition duration-300">
+                    <div class="p-8">
+                        <div class="text-xs font-bold tracking-widest text-slate-400 uppercase mb-2">A Escolha Premium</div>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-4">Jardim Goiás</h3>
+                        <p class="text-slate-600 text-sm mb-6">
+                            Para quem tem capital e busca posicionamento de marca. O público paga caro, mas exige estrutura de ponta (ar condicionado, vestiários de luxo).
+                        </p>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-center text-sm text-slate-700"><span class="mr-2 text-brand-blue">✓</span> Poder Aquisitivo Alto</li>
+                            <li class="flex items-center text-sm text-slate-700"><span class="mr-2 text-brand-blue">✓</span> Visibilidade</li>
+                            <li class="flex items-center text-sm text-slate-700"><span class="mr-2 text-brand-blue">✓</span> Concorrência Média</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 px-8 py-4 border-t border-slate-100">
+                        <span class="text-brand-dark font-bold text-sm">Ideal para:</span> <span class="text-slate-600 text-sm">Investidores experientes</span>
+                    </div>
+                </div>
+
+                <!-- Recommendation 3 -->
+                <div class="relative bg-white rounded-2xl shadow-lg overflow-hidden border-t-8 border-slate-500 opacity-90 hover:opacity-100 transition duration-300">
+                    <div class="p-8">
+                        <div class="text-xs font-bold tracking-widest text-slate-400 uppercase mb-2">A Escolha de Volume</div>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-4">Ap. de Goiânia (Centro)</h3>
+                        <p class="text-slate-600 text-sm mb-6">
+                            Foco em quantidade de alunos com mensalidade mais baixa. Custo fixo irrisório permite margem de lucro saudável através do volume.
+                        </p>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-center text-sm text-slate-700"><span class="mr-2 text-slate-500">✓</span> Aluguel Barato</li>
+                            <li class="flex items-center text-sm text-slate-700"><span class="mr-2 text-slate-500">✓</span> População Jovem</li>
+                            <li class="flex items-center text-sm text-slate-700"><span class="mr-2 text-slate-500">✓</span> Concorrência Pulverizada</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 px-8 py-4 border-t border-slate-100">
+                        <span class="text-brand-dark font-bold text-sm">Ideal para:</span> <span class="text-slate-600 text-sm">Professores locais</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-12 text-center">
+        <div class="max-w-4xl mx-auto px-6">
+            <p class="text-lg font-semibold text-white mb-2">Análise de Mercado Esportivo</p>
+            <p class="text-sm opacity-60">Dados simulados para fins ilustrativos.</p>
+        </div>
+    </footer>
+
+    <!-- Chart.js Logic -->
+    <script>
+        // --- UTILITIES ---
+        // Requirement: Process labels > 16 chars into arrays
+        function processLabel(label) {
+            if (label.length <= 16) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if ((currentLine + ' ' + words[i]).length <= 16) {
+                    currentLine += ' ' + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        const commonTooltip = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels ? item.chart.data.labels[item.dataIndex] : '';
+                    // For Scatter/Bubble, labels might be in the dataset data object
+                    if (!label && item.raw.label) label = item.raw.label;
+                    
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        // --- DATA ---
+        const sectors = [
+            { name: 'Setor Bueno', density: 10, competition: 12, rent: 9, synergy: 15, label: 'Bueno' },
+            { name: 'Setor Marista', density: 8, competition: 10, rent: 10, synergy: 12, label: 'Marista' },
+            { name: 'Jardim Goiás', density: 9, competition: 8, rent: 9, synergy: 10, label: 'Jd. Goiás' },
+            { name: 'Parque Amazônia', density: 8, competition: 3, rent: 6, synergy: 8, label: 'Pq. Amazônia' },
+            { name: 'Res. Eldorado', density: 9, competition: 4, rent: 6, synergy: 7, label: 'Res. Eldorado' },
+            { name: 'Setor Oeste', density: 7, competition: 7, rent: 8, synergy: 8, label: 'Oeste' },
+            { name: 'Pedro Ludovico', density: 7, competition: 5, rent: 5, synergy: 6, label: 'P. Ludovico' },
+            { name: 'Negrão de Lima', density: 6, competition: 2, rent: 4, synergy: 4, label: 'N. de Lima' },
+            { name: 'Ap. Centro', density: 6, competition: 3, rent: 3, synergy: 5, label: 'Ap. Centro' },
+            { name: 'Alphaville', density: 3, competition: 2, rent: 7, synergy: 3, label: 'Alphaville' }
+        ];
+
+        // Process Labels for Charts
+        const sectorLabels = sectors.map(s => processLabel(s.name));
+
+        // --- CHART 1: BUBBLE CHART (Strategic) ---
+        const ctxBubble = document.getElementById('bubbleChart').getContext('2d');
+        new Chart(ctxBubble, {
+            type: 'bubble',
+            data: {
+                datasets: [{
+                    label: 'Setores',
+                    data: sectors.map(s => ({
+                        x: s.competition,
+                        y: s.density,
+                        r: s.synergy, // Size based on Synergy
+                        label: s.name // Store full name for tooltip
+                    })),
+                    backgroundColor: function(context) {
+                        const val = context.raw;
+                        // Green/Teal for Sweet Spot (High Density, Low Comp)
+                        if (val && val.y >= 7 && val.x <= 5) return 'rgba(34, 197, 94, 0.7)'; 
+                        // Red for Saturated (High Comp)
+                        if (val && val.x > 8) return 'rgba(239, 68, 68, 0.7)';
+                        // Blue default
+                        return 'rgba(29, 78, 216, 0.6)';
+                    },
+                    borderColor: function(context) {
+                         const val = context.raw;
+                        if (val && val.y >= 7 && val.x <= 5) return 'rgb(21, 128, 61)'; 
+                        if (val && val.x > 8) return 'rgb(185, 28, 28)';
+                        return 'rgb(30, 58, 138)';
+                    },
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Concorrência Direta (Qtd. Dojos)' },
+                        min: 0, max: 15,
+                        grid: { color: '#f1f5f9' }
+                    },
+                    y: {
+                        title: { display: true, text: 'Densidade Populacional (1-10)' },
+                        min: 0, max: 12,
+                        grid: { color: '#f1f5f9' }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.raw.label;
+                            },
+                            afterLabel: function(context) {
+                                return `Comp: ${context.raw.x} | Dens: ${context.raw.y} | Sinergia: ${context.raw.r}`;
+                            }
+                        }
+                    },
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // --- CHART 2: BAR CHART (Costs) ---
+        // Sort by Rent Descending
+        const sortedByRent = [...sectors].sort((a,b) => b.rent - a.rent);
+        const rentLabels = sortedByRent.map(s => processLabel(s.name));
+        
+        const ctxBar = document.getElementById('barChart').getContext('2d');
+        new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: rentLabels,
+                datasets: [{
+                    label: 'Custo Aluguel (Índice)',
+                    data: sortedByRent.map(s => s.rent),
+                    backgroundColor: sortedByRent.map(s => s.rent > 7 ? '#ef4444' : (s.rent < 5 ? '#22c55e' : '#f97316')),
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, grid: { display: false } },
+                    x: { grid: { display: false } }
+                },
+                plugins: {
+                    tooltip: commonTooltip,
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // --- CHART 3: RADAR CHART (Comparison) ---
+        // Top 3: Parque Amazônia, Jardim Goiás, Eldorado
+        const ctxRadar = document.getElementById('radarChart').getContext('2d');
+        new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: ['Densidade', 'Baixa Concorrência', 'Sinergia (Gyms)', 'Acessibilidade ($)', 'Potencial Jovens'],
+                datasets: [
+                    {
+                        label: 'Parque Amazônia',
+                        data: [8, 8, 8, 7, 8], // Note: Low comp is converted to a positive score "Low Competition"
+                        fill: true,
+                        backgroundColor: 'rgba(34, 197, 94, 0.2)',
+                        borderColor: 'rgb(34, 197, 94)',
+                        pointBackgroundColor: 'rgb(34, 197, 94)',
+                    },
+                    {
+                        label: 'Jardim Goiás',
+                        data: [9, 4, 9, 3, 7], // High density, High comp (low score), High synergy, High rent (low score)
+                        fill: true,
+                        backgroundColor: 'rgba(29, 78, 216, 0.2)',
+                        borderColor: 'rgb(29, 78, 216)',
+                        pointBackgroundColor: 'rgb(29, 78, 216)',
+                    },
+                    {
+                        label: 'Res. Eldorado',
+                        data: [9, 7, 7, 6, 10], // High density, mid comp, mid synergy, mid rent, very high youth
+                        fill: true,
+                        backgroundColor: 'rgba(249, 115, 22, 0.2)',
+                        borderColor: 'rgb(249, 115, 22)',
+                        pointBackgroundColor: 'rgb(249, 115, 22)',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                elements: { line: { borderWidth: 3 } },
+                scales: {
+                    r: {
+                        angleLines: { color: '#e2e8f0' },
+                        grid: { color: '#e2e8f0' },
+                        pointLabels: {
+                            font: { size: 12, family: 'Inter' }
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 10
+                    }
+                },
+                plugins: {
+                    tooltip: commonTooltip,
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // --- CHART 4: DONUT CHART (Demographics) ---
+        const ctxDonut = document.getElementById('donutChart').getContext('2d');
+        new Chart(ctxDonut, {
+            type: 'doughnut',
+            data: {
+                labels: ['Kids (4-12 anos)', 'Adultos (Hobby)', 'Competidores', 'Mulheres'],
+                datasets: [{
+                    data: [45, 30, 10, 15],
+                    backgroundColor: ['#f97316', '#1d4ed8', '#1e293b', '#60a5fa'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'right', labels: { boxWidth: 15 } },
+                    tooltip: commonTooltip
+                }
+            }
+        });
+
+        // --- CHART 5: LINE CHART (Projection) ---
+        const ctxLine = document.getElementById('lineChart').getContext('2d');
+        new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: ['Mês 1', 'Mês 4', 'Mês 8', 'Mês 12', 'Mês 18', 'Mês 24'],
+                datasets: [{
+                    label: 'Alunos Ativos (Estimado)',
+                    data: [15, 40, 85, 120, 180, 220], // Break even at 85
+                    borderColor: '#1d4ed8',
+                    backgroundColor: 'rgba(29, 78, 216, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { grid: { display: false } },
+                    x: { grid: { display: false } }
+                },
+                plugins: {
+                    tooltip: commonTooltip,
+                    legend: { display: false },
+                    annotation: {
+                        // Manual Break Even line via plugin not available, implied by text
+                    }
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>
